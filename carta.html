@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para ti ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- FONDO Y NIEVE --- */
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); /* Azul noche profundo para la "galaxia" */
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Merriweather', serif;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Animación de nieve en 3 capas */
+        .snow-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+            background-image: url('https://www.transparenttextures.com/patterns/snow.png');
+            background-size: 400px;
+        }
+        .layer-1 { animation: snowfall 10s linear infinite; opacity: 0.8; }
+        .layer-2 { animation: snowfall 18s linear infinite; background-size: 300px; opacity: 0.6; filter: blur(1px); }
+        .layer-3 { animation: snowfall 25s linear infinite; background-size: 600px; opacity: 0.4; filter: blur(2px); }
+
+        @keyframes snowfall {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 600px; }
+        }
+
+        /* --- EL SOBRE --- */
+        .container {
+            position: relative;
+            width: 320px; height: 220px;
+            z-index: 10;
+        }
+
+        .envelope-wrapper {
+            position: absolute; width: 100%; height: 100%;
+            cursor: pointer; transition: all 1s ease-in-out;
+        }
+        
+        .envelope-body {
+            position: absolute; bottom: 0; width: 100%; height: 100%;
+            background-color: #8b0000; /* Rojo Navidad Intenso */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-radius: 5px; overflow: hidden; z-index: 10;
+        }
+
+        /* Textura del sobre (fondo.jpg) */
+        .envelope-texture {
+            position: absolute; width: 100%; height: 100%;
+            background-image: url('fondo.jpg');
+            background-size: cover; background-position: center;
+            opacity: 0.6; mix-blend-mode: multiply;
+        }
+
+        .lid {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 120px solid #a50000; /* Un rojo un poco más claro */
+            transform-origin: top; transition: transform 0.8s ease; z-index: 20;
+        }
+
+        .seal {
+            position: absolute; top: 90px; left: 50%; transform: translateX(-50%);
+            font-size: 45px; z-index: 25; text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+        }
+
+        .hint {
+            position: absolute; bottom: -50px; width: 100%; text-align: center;
+            color: #fff; font-family: 'Dancing Script', cursive; font-size: 1.4rem;
+            animation: pulse 2s infinite; text-shadow: 0 0 5px #000;
+        }
+
+        /* --- LA CARTA --- */
+        .letter-container {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            width: 90%; max-width: 500px; height: 85vh;
+            background-color: #f4e4bc; /* Papel antiguo */
+            background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            border-radius: 5px;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            opacity: 0; z-index: -1; pointer-events: none;
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-y: auto; /* IMPORTANTE: Permite bajar para leer todo */
+            border: 1px solid #c2b280;
+        }
+
+        /* Estilos del Texto */
+        .letter-content h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #800000;
+            font-size: 2rem; margin-top: 0; text-align: center;
+            border-bottom: 2px solid #800000; padding-bottom: 10px;
+        }
+
+        .letter-content p {
+            color: #3b2f2f; /* Café muy oscuro para lectura fácil */
+            font-size: 1rem; line-height: 1.7; text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        /* Fotos */
+        .photo-section {
+            display: flex; justify-content: space-around;
+            margin: 25px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+        .polaroid {
+            background: #fff; padding: 6px 6px 20px 6px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            width: 40%; transform: rotate(-2deg);
+        }
+        .polaroid:last-child { transform: rotate(2deg); }
+        .polaroid img { width: 100%; display: block; filter: sepia(20%); }
+
+        /* Cita final */
+        .quote {
+            font-style: italic; color: #555; text-align: center;
+            margin-top: 30px; padding: 15px;
+            border-top: 1px dashed #999;
+            font-size: 0.95rem;
+        }
+
+        /* Animación Open */
+        .container.open .lid { transform: rotateX(180deg); }
+        .container.open .envelope-wrapper {
+            transform: translateY(200px) scale(0.5); opacity: 0; pointer-events: none; transition-delay: 0.2s;
+        }
+        .container.open .letter-container {
+            opacity: 1; z-index: 100; pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1); transition-delay: 0.5s;
+        }
+        .container.open .hint { opacity: 0; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+
+    <div class="snow-layer layer-1"></div>
+    <div class="snow-layer layer-2"></div>
+    <div class="snow-layer layer-3"></div>
+
+    <div class="container" id="cartaContainer">
+        <div class="envelope-wrapper" onclick="abrirCarta()">
+            <div class="envelope-body">
+                <div class="envelope-texture"></div>
+            </div>
+            <div class="lid"></div>
+            <div class="seal">🎄</div>
+        </div>
+        <div class="hint">Toca el sobre para abrir 💌</div>
+
+        <div class="letter-container">
+            <div class="letter-content">
+                <h1>Hola, hola, cachetoncita ✨</h1>
+                
+                <p>Felices fiestas.</p>
+
+                <p>Sé que esta Navidad pesa distinto. Sé que no es fácil sentarte a la mesa cuando sabes que faltan voces, risas y miradas que antes estaban ahí. Hay ausencias que no se llenan con nada, y hoy, más que otros días, se sienten fuerte en el pecho. Tu corazón, que ama tan intensamente a su familia, no sabe fingir que todo está bien, y por eso duele. Y quiero que sepas algo importante: sentirte así no es debilidad, es amor.</p>
+
+                <p>Entiendo que tu mente a veces no te deja disfrutar, que los recuerdos llegan sin avisar y se quedan más tiempo del que quisiéramos. Que aunque sonrías, por dentro hay un nudo que no se va del todo. Pero incluso así, incluso en medio de esa tristeza silenciosa, quiero que recuerdes que no estás sola, nunca lo has estado.</p>
+
+                <p>Hoy no vengo a pedirte que estés bien, ni que finjas alegría. Solo vengo a pedirte que respires. Que te permitas vivir esta Navidad como puedas, a tu ritmo, con tus tiempos. Que abraces a quienes siguen a tu lado con todo el amor que llevas dentro, porque ese amor también es una forma de honrar a quienes ya no están físicamente.</p>
+
+                <p>Ellos no se han ido del todo. Viven en tus gestos, en tu manera de cuidar, en tu forma de amar tan genuina. Viven en cada recuerdo que te arranca una lágrima y en cada sonrisa que aparece sin querer. Tal vez no estén sentados a la mesa, pero están en ti, caminando contigo, cuidándote desde un lugar que no vemos, pero que se siente. Estoy seguro de que hoy te acompañan, te envuelven y te sostienen, incluso cuando tú no lo notas.</p>
+                
+                <p>Sé fuerte, mi pequeña, no porque no duela, sino porque a pesar del dolor sigues adelante. Porque aun con el corazón cansado, sigues dando amor. Porque sigues siendo luz para los demás, incluso en tus días más grises. Y eso habla de la persona tan hermosa que eres.</p>
+
+                <p>Disfruta lo que puedas, niña preciosa. Abraza mucho a tu mamá y a tu papá, guarda esos abrazos como si fueran tesoros, porque lo son. Que esta Navidad no sea perfecta, pero que sea sincera. Que tenga nostalgia, sí, pero también paz. Que tenga lágrimas, pero también calma.</p>
+
+                <div class="photo-section">
+                    <div class="polaroid"><img src="gatito.png" alt="Gatito"></div>
+                    <div class="polaroid"><img src="perrito.png" alt="Perrito"></div>
+                </div>
+
+                <p>Feliz Navidad a la mujer más hermosa y fuerte de la galaxia 🌌<br>
+                Que hoy tu corazón encuentre, aunque sea por instantes, un poco de descanso.</p>
+
+                <div class="quote">
+                    "Las personas que amamos nunca se van del todo; cambian de lugar… pasan de estar frente a nosotros, a vivir dentro de nosotros."
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+
+    <audio id="musica" loop>
+        <source src="musica.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        function abrirCarta() {
+            const container = document.getElementById('cartaContainer');
+            const audio = document.getElementById('musica');
+
+            if (!container.classList.contains('open')) {
+                container.classList.add('open');
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log("Audio requiere interacción"));
+            }
+        }
+    </script>
+</body>
+</html>
